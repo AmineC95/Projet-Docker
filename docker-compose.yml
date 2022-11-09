@@ -1,0 +1,44 @@
+version: "3.9"  
+
+services:
+
+  web:
+    image: nginx
+    volumes:
+    - ./etc/nginx/conf.d/:/etc/nginx/templates
+    ports:
+    - "8080:80"
+    links:
+      - php
+      - mysql:db
+
+  php:
+    image: php:latest-fpm
+    volumes: 
+      - ./var/www/html/:/var/www/html/
+    ports:
+      - "8081:80"
+    environment:
+      XDEBUG_CONFIG: remote_host=host.docker.internal
+    links:
+      - mysql
+
+  mysql:
+    image: mysql:latest
+    ports:
+      - "3310:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+
+  phpmyadmin:
+    image: phpmyadmin
+    links:
+      - mysql:db
+    volumes: 
+      - ./code:/code
+    ports:
+      - "8082:80"
+    environment:
+      - PMA_USER=root
+      - PMA_PASSWORD=password
+      - PHP_UPLOAD_MAX_FILESIZE=100MB
