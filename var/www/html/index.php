@@ -9,5 +9,6 @@
 <body>
     <h1>PAGE PHP</h1>
 <p>lorem ipsum dolor sit amet.</p>
+<?php phpinfo() ?>
 </body>
 </html>
